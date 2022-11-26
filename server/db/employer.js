@@ -25,6 +25,23 @@ dorsedb.callEmployerById = (id) => {
     })
 }
 
+dorsedb.callEmployerByUsernameAndPassword = (username, password) => {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT * FROM dorsedb.employer
+        WHERE dorsedb.employer.username = ? and dorsedb.employer.password = ?;
+          `,
+        [username, password],
+        (err, results) => {
+          if (err) {
+            return reject(err);
+          }
+          return resolve(results);
+        }
+      );
+    });
+  };
+
 dorsedb.addEmployer = (employer) => {
     return new Promise((resolve, reject) => {
         pool.query(`INSERT INTO dorsedb.employer SET ?`, [employer], (err, results) =>{

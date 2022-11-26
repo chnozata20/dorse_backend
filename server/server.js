@@ -7,12 +7,16 @@ const trailerRouter = require('./routes/trailer');
 const vehicleRouter = require('./routes/vehicle');
 const driverCommentRouter = require('./routes/driver_comment');
 const emploerCommentRouter = require('./routes/employer_comment');
+const cors = require('cors');
 
 
 const app = express();
 
-app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:3456'
+}));
 
+app.use(express.json());
 app.use('/driver', driverRouter);
 app.use('/employer', employerRouter);
 app.use('/cargo', cargoRouter);
@@ -26,5 +30,6 @@ app.use('/employercomment', emploerCommentRouter);
 app.listen(process.env.PORT || '3000', () => {
 
     console.log(`Server is running on port: ${process.env.PORT || '3000'}`);
+
     
 });

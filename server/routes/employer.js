@@ -24,6 +24,17 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
+router.post('/user', async (req, res, next) => {
+    try {
+        let result = await db.callEmployerByUsernameAndPassword(req.body.username, req.body.password);
+        res.json(result);
+    }
+    catch(e) {
+        console.log(e);
+        res.sendStatus(404);
+    }
+})
+
 router.post("/", async (req, res, next) => {
     try {
         let result = await db.addEmployer(req.body);

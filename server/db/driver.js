@@ -25,6 +25,23 @@ dorsedb.callDriverById = (id) => {
     })
 }
 
+dorsedb.callDriverByUsernameAndPassword = (username, password) => {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT * FROM dorsedb.driver
+        WHERE dorsedb.driver.username = ? and dorsedb.driver.password = ?;
+          `,
+        [username, password],
+        (err, results) => {
+          if (err) {    
+            return reject(err);
+          }
+          return resolve(results);
+        }
+      );
+    });
+  };
+
 dorsedb.addDriver = (driver) => {
     return new Promise((resolve, reject) => {
         pool.query(`INSERT INTO dorsedb.driver SET ?`, [driver], (err, results) =>{
