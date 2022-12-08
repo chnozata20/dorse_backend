@@ -5,10 +5,11 @@ let dorsedb = {};
 dorsedb.callCargoAll = () => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT cargo.id as cargoId, cargo.startDate, cargo.endDate, cargo.vehicleType, cargo.trailerType,cargo.tonnage,cargo.volume,cargo.cargoType,cargo.paymentType,cargo.price,cargo.distance,
-            cargo.width,cargo.length,p1.city as startCity,p2.city as endCity
-            FROM dorsedb.cargo as cargo, dorsedb.point as p1, dorsedb.point as p2
-            WHERE cargo.startPointId=p1.id and cargo.endPointId=p2.id;
+      `SELECT cargo.id as cargoId, DATE_FORMAT(cargo.startDate, '%Y-%m-%d') AS startDate , DATE_FORMAT(cargo.startDate, '%Y-%m-%d') AS endDate, cargo.vehicleType, cargo.trailerType,cargo.tonnage,cargo.volume,cargo.cargoType,cargo.paymentType,cargo.price,cargo.distance,
+      cargo.width,cargo.lenght,cargo.height,p1.id as startPointId, p1.city as startCity, p1.countie as startCountie, p1.neighbourhood as startNeighbourhood, p1.street as startStreet, p1.no as startNo, 
+      p2.id as endPointId, p2.city as endCity, p2.countie as endCountie, p2.neighbourhood as endNeighbourhood, p2.street as endStreet, p2.no as endNo 
+      FROM dorsedb.cargo as cargo, dorsedb.point as p1, dorsedb.point as p2
+      WHERE cargo.startPointId=p1.id and cargo.endPointId=p2.id;
             `,
       (err, results) => {
         if (err) {
@@ -24,7 +25,32 @@ dorsedb.callCargoById = (id) => {
   return new Promise((resolve, reject) => {
     // pool.query(`SELECT * FROM dorsedb.cargo WHERE id = ${id}`, (err, results) => {//it can be hacked
     pool.query(
-      `SELECT * FROM dorsedb.cargo WHERE id = ?`,
+      `SELECT cargo.id as cargoId, DATE_FORMAT(cargo.startDate, '%Y-%m-%d') AS startDate , DATE_FORMAT(cargo.startDate, '%Y-%m-%d') AS endDate, cargo.vehicleType, cargo.trailerType,cargo.tonnage,cargo.volume,cargo.cargoType,cargo.paymentType,cargo.price,cargo.distance,
+      cargo.width,cargo.lenght,cargo.height,p1.id as startPointId, p1.city as startCity, p1.countie as startCountie, p1.neighbourhood as startNeighbourhood, p1.street as startStreet, p1.no as startNo, 
+      p2.id as endPointId, p2.city as endCity, p2.countie as endCountie, p2.neighbourhood as endNeighbourhood, p2.street as endStreet, p2.no as endNo 
+      FROM dorsedb.cargo as cargo, dorsedb.point as p1, dorsedb.point as p2
+      WHERE cargo.startPointId=p1.id and cargo.endPointId=p2.id and cargo.id = ?;`,
+      [id],
+      (err, results) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(results[0]);
+      }
+    );
+  });
+};
+
+dorsedb.callCargoByEmployerId = (id) => {
+  return new Promise((resolve, reject) => {
+    // pool.query(`SELECT * FROM dorsedb.cargo WHERE id = ${id}`, (err, results) => {//it can be hacked
+    pool.query(
+      `SELECT cargo.id as cargoId, DATE_FORMAT(cargo.startDate, '%Y-%m-%d') AS startDate , DATE_FORMAT(cargo.startDate, '%Y-%m-%d') AS endDate, cargo.vehicleType, cargo.trailerType,cargo.tonnage,cargo.volume,cargo.cargoType,cargo.paymentType,cargo.price,cargo.distance,
+      cargo.width,cargo.lenght,cargo.height,p1.id as startPointId, p1.city as startCity, p1.countie as startCountie, p1.neighbourhood as startNeighbourhood, p1.street as startStreet, p1.no as startNo, 
+      p2.id as endPointId, p2.city as endCity, p2.countie as endCountie, p2.neighbourhood as endNeighbourhood, p2.street as endStreet, p2.no as endNo 
+      FROM dorsedb.cargo as cargo, dorsedb.point as p1, dorsedb.point as p2
+      WHERE cargo.startPointId=p1.id and cargo.endPointId=p2.id and employerId = ?;
+      `,
       [id],
       (err, results) => {
         if (err) {
@@ -39,10 +65,11 @@ dorsedb.callCargoById = (id) => {
 dorsedb.callCargoByCity = (city) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT cargo.id as cargoId, cargo.startDate, cargo.endDate, cargo.vehicleType, cargo.trailerType,cargo.tonnage,cargo.volume,cargo.cargoType,cargo.paymentType,cargo.price,cargo.distance,
-        cargo.width,cargo.length,p1.city as startCity,p2.city as endCity
-        FROM dorsedb.cargo as cargo, dorsedb.point as p1, dorsedb.point as p2
-        WHERE cargo.startPointId=p1.id and cargo.endPointId=p2.id and (p1.city = ? or p2.city = ? );
+      `SELECT cargo.id as cargoId, DATE_FORMAT(cargo.startDate, '%Y-%m-%d') AS startDate , DATE_FORMAT(cargo.startDate, '%Y-%m-%d') AS endDate, cargo.vehicleType, cargo.trailerType,cargo.tonnage,cargo.volume,cargo.cargoType,cargo.paymentType,cargo.price,cargo.distance,
+      cargo.width,cargo.lenght,cargo.height,p1.id as startPointId, p1.city as startCity, p1.countie as startCountie, p1.neighbourhood as startNeighbourhood, p1.street as startStreet, p1.no as startNo, 
+      p2.id as endPointId, p2.city as endCity, p2.countie as endCountie, p2.neighbourhood as endNeighbourhood, p2.street as endStreet, p2.no as endNo 
+      FROM dorsedb.cargo as cargo, dorsedb.point as p1, dorsedb.point as p2
+      WHERE cargo.startPointId=p1.id and cargo.endPointId=p2.id and (p1.city = ? or p2.city = ? );
         `,
       [city, city],
       (err, results) => {

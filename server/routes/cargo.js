@@ -35,6 +35,17 @@ router.get('/city/:city', async (req, res, next) => {
     }
 })
 
+router.get('/employerid/:id', async (req, res, next) => {
+    try {
+        let result = await db.callCargoByEmployerId(req.params.id);
+        res.json(result);
+    }
+    catch(e) {
+        console.log(e);
+        res.sendStatus(404);
+    }
+})
+
 router.post("/", async (req, res, next) => {
     try {
         let result = await db.addCargo(req.body);
