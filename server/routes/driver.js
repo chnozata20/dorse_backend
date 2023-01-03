@@ -12,6 +12,16 @@ router.get('/all', async (req, res, next) => {
         res.sendStatus(500);
     }
 })
+router.get('/admin/all', async (req, res, next) => {
+    try {
+        let result = await db.callDriverVehicleTrailerAll();
+        res.json(result);
+    }
+    catch(e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+})
 
 router.get('/:id', async (req, res, next) => {
     try {
